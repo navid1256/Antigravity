@@ -1,0 +1,18 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=Antigravity Unlocker
+Comment=Unlock Antigravity 2.0 / IDE / CLI
+# Self-resolving: %k is this .desktop file's own location, so the launcher next to
+# it is found wherever the folder is unpacked. Only the %k field code is used (no
+# other % sequences, which a .desktop Exec parser would mangle); a file:// prefix
+# is stripped. Keep the folder path free of spaces, or use install.sh instead.
+# `bash launch.sh`, not `launch.sh`: runs whether or not the unpacking kept the
+# script's executable bit.
+Exec=bash -c 'p="%k"; p="${p#file://}"; exec bash "$(dirname "$p")/launch.sh"'
+Icon=security-high
+# The tool is a window since 2.12.2, not a numbered console menu. Left at `true`
+# the desktop opens an empty terminal behind it for the whole session.
+Terminal=false
+Categories=Utility;Development;
+StartupNotify=false

@@ -1,0 +1,44 @@
+# Rust build output and packaged releases.
+# Keep Cargo.lock and .cargo/config.toml in version control.
+/target/
+/target-linux/
+/release/
+/*.exe
+/*.pdb
+*.rs.bk
+
+# Private inputs used only by the maintainer's builds.
+/.secrets.json
+/.relay_key
+/.exits
+/.group
+/src/relay.rs
+/src/exits.rs
+
+# Generated key helper and Python caches/environments.
+/dist_keygen.py
+__pycache__/
+*.py[cod]
+/.venv/
+/venv/
+
+# Local environment configuration; retain the example if one is added.
+/.env
+/.env.*
+!/.env.example
+
+# Logs, saved reports, patch backups, and temporary files.
+*.log
+/Antigravity Unlocker - report.txt
+*.ag_backup
+*.agtmp
+*.tmp
+
+# Local editor and operating-system files.
+/.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+Desktop.ini

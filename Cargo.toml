@@ -1,0 +1,76 @@
+[package]
+name = "ag_unlocker"
+version = "2.28.0"
+edition = "2021"
+description = "Antigravity Configuration Tool"
+authors = ["Brent t.me/nova_txt"]
+
+[dependencies]
+obfstr = "0.4"
+sha2 = "0.10"
+hex = "0.4"
+regex = "1.10"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+rustls = { version = "0.23", default-features = false, features = ["std", "ring", "tls12"] }
+webpki-roots = "1"
+# Decrypts the relay credential baked in by build.rs (owner build only; the
+# private src/relay.rs is the only user).
+aes-gcm = "0.10"
+# Reading the clipboard (right-click on the licence field pastes into it). Not a
+# new dependency in any real sense: eframe's own clipboard support is arboard, so
+# the crate is already linked in - this only asks it a question egui does not
+# expose. `default-features = false` because the image half is eframe's business,
+# not ours; features unify, so the build is unchanged either way.
+arboard = { version = "3.6", default-features = false }
+# The one socket `TcpStream` cannot build: IP_UNICAST_IF has to be set before
+# `connect`, and std creates and connects in one call. Pins the relay's own
+# connections to the ISP link while a VPN holds the default route (`net.rs`),
+# the same way every UDP resolver query already is (I4). Small, no runtime.
+socket2 = "0.6"
+# The terminal UI (`--tui`; on Linux also any start with no graphical session,
+# e.g. a server over SSH; on Windows also the fallback when no renderer opens a
+# window). Only the crossterm backend - no widgets beyond the core set.
+ratatui = { version = "0.30", default-features = false, features = ["crossterm"] }
+
+# The GUI. Immediate mode, pure Rust, one static exe with no runtime to install
+# (no WebView2, no GTK) - that is what makes it drop onto an arbitrary Windows
+# 10/11 machine and still start. `glow` (plain OpenGL) is compiled in beside
+# wgpu as the last renderer in the chain. See gui/renderer.rs.
+#
+# On Windows wgpu is built with **DirectX 12 only**. Its default set also has
+# Vulkan and GLES, and wgpu enumerates every compiled-in backend before it picks
+# one - so a machine with a broken Vulkan driver or a stale implicit layer (an
+# uninstalled overlay's registry entry) crashed inside vulkan-1.dll before a
+# window ever opened, whichever adapter would have been chosen. D3D12 and its
+# software rasteriser WARP ship with every Windows 10, so nothing else is needed.
+[target.'cfg(windows)'.dependencies]
+eframe = { version = "0.36", default-features = false, features = ["accesskit", "default_fonts", "links", "wgpu_no_default_features", "glow"] }
+wgpu = { version = "30", default-features = false, features = ["std", "parking_lot", "wgsl", "dx12"] }
+
+[target.'cfg(not(windows))'.dependencies]
+# Linux has no DirectX: wgpu's default Vulkan + GL, then glow.
+eframe = { version = "0.36", features = ["glow"] }
+
+[build-dependencies]
+winres = "0.1"
+# build.rs derives the per-release canary with the same formula as canary.rs.
+sha2 = "0.10"
+hex = "0.4"
+# Encrypt the relay credential into the binary with a random per-build key.
+aes-gcm = "0.10"
+getrandom = "0.2"
+
+[profile.release]
+opt-level = "z"
+# LTO on since 2.12.2_1. It was off for build speed while the exe was ~1 MB and
+# UPX made the on-disk size somebody else's problem; the GUI took the binary to
+# ~12.5 MB and UPX is off for good (D1-D2, antivirus), so the tradeoff flipped.
+# It costs build time only: link-time optimisation happens in the linker, and the
+# file that comes out starts no slower than the one that went in - which is the
+# whole reason it is the size lever to reach for first, ahead of any packer.
+lto = "fat"
+codegen-units = 1
+panic = "abort"
+strip = true
+
