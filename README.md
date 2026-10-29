@@ -1,127 +1,122 @@
-# Antigravity Unlocker — English edition
+# Antigravity Unlocker · English Edition
 
-A Windows and Linux patcher for installed copies of Antigravity 2.0, Antigravity IDE, and Antigravity CLI. It applies client patches and configures targeted DNS/proxy routing to address regional sign-in restrictions and error 400, "User location is not supported". Automatic patching can reapply the patches after Antigravity updates.
+[![GitHub stars](https://img.shields.io/github/stars/navid1256/Antigravity-English?style=flat)](https://github.com/navid1256/Antigravity-English/stargazers)
+[![Windows x64](https://img.shields.io/badge/download-Windows_x64-0078D4)](https://github.com/navid1256/Antigravity-English/releases/tag/v2.28.0-en.1)
+[![Interface: English](https://img.shields.io/badge/interface-English-2ea44f)](#why-this-edition)
 
-This edition translates the unlocker's GUI, terminal interface, diagnostic messages, reports, and documentation into English. It does not change the language of Antigravity itself.
+**Antigravity Unlocker, with an English interface and a ready-to-run Windows download.**
 
-Video guide: https://youtu.be/aybWT_7wtqA
+A community edition of [Antigravity Unlocker](https://github.com/confeden/Antigravity) for Antigravity 2.0, Antigravity IDE, and Antigravity CLI. It patches installed clients and configures targeted DNS/proxy routing to address regional sign-in errors, including error 400, “User location is not supported.” Availability still depends on the account, service, and working routes.
 
-## Build the English version
+## Download for Windows
 
-Building from source requires Rust and Cargo. On Windows, the MSVC C++ build tools and a Windows SDK are also required. These tools are needed to build the executable; running an already-built unlocker does not require Rust or Cargo.
+### [Download the English EXE — Windows 10/11 x64](https://github.com/navid1256/Antigravity-English/releases/download/v2.28.0-en.1/Antigravity-English-2.28.0-en.1-windows-x64.exe)
 
-From the project folder, run:
+**About 10.3 MiB · Preview `v2.28.0-en.1` · No Rust or Cargo installation needed to run.**
+
+[Release notes](https://github.com/navid1256/Antigravity-English/releases/tag/v2.28.0-en.1) · [SHA-256 checksums](https://github.com/navid1256/Antigravity-English/releases/download/v2.28.0-en.1/SHA256SUMS.txt) · [Report an issue](https://github.com/navid1256/Antigravity-English/issues)
+
+This preview includes the English translation and the IDE shared-CLI discovery fix. The Windows build and focused tests pass; successful IDE sign-in and a model response after this fix have **not yet been verified**. The executable is unsigned.
+
+## Why this edition?
+
+- **English throughout:** GUI, terminal interface, diagnostic messages, reports, and documentation.
+- **Better Windows discovery:** finds the shared `agy.exe` that an IDE extension can launch from `%USERPROFILE%/.gemini/bin`.
+- **Download and run:** a Windows executable is attached to this repository's release.
+- **Visible controls:** inspect detected installations, enable the setup, and undo individual changes using the switches.
+- **Automatic patching:** can reapply client patches after Antigravity updates.
+
+The translation changes the unlocker's language. Antigravity's own interface language is configured separately.
+
+## Get started
+
+1. Install Antigravity from the [official website](https://antigravity.google/download).
+2. Download the English EXE above, then close Antigravity IDE and any older unlocker window.
+3. Right-click the EXE and choose **Run as administrator**. Administrator rights are required for the Windows service and system routing setup.
+4. Enter the upstream **2.28.0** key from the pinned messages in [@nova_txt](https://t.me/nova_txt/69864). The English release suffix does not change the application's underlying version.
+5. Check the detected installations and click **Enable all**. Antigravity may close briefly while its files are patched.
+6. Reopen Antigravity, sign in, and send a chat message. A successful model response is the useful end-to-end check; detection or a successful patch alone does not prove connectivity.
+
+Use the switches to undo the corresponding changes. Under **Advanced settings**, you can also add a custom IPv4 DNS server.
+
+## Antigravity IDE and the shared CLI
+
+Antigravity CLI is the command-line application whose executable is `agy.exe`. An IDE extension can also run it in the background:
+
+```text
+%USERPROFILE%/.gemini/bin/agy.exe --hub
+```
+
+Earlier builds missed this folder during Windows discovery. This edition checks it automatically and lists the executable as an **Antigravity CLI** installation. Patching the IDE's bundled Language Server alone leaves this separate executable unchanged.
+
+If the CLI is missing from the list, use the installation's pencil button to add your profile's `.gemini/bin` folder. Then apply the setup and retry the IDE. Finding an unpatched CLI does not by itself establish the cause of an account eligibility error.
+
+**Gemini CLI is a separate application.** This project patches Antigravity clients; it makes no claim that Gemini CLI is disabled or unavailable. The `.gemini` folder name alone does not identify an executable as Gemini CLI.
+
+## Terminal interface
+
+The same English executable includes a terminal interface. From PowerShell in the download folder:
+
+```powershell
+./Antigravity-English-2.28.0-en.1-windows-x64.exe --tui
+```
+
+Enter the key, use the arrow keys to select an option, press Space to toggle it, and press `q` to quit. Run PowerShell as administrator when applying the Windows service or routing changes.
+
+The repository's `tui.ps1` and `tui.sh` download upstream binaries. Use the English EXE above or a local source build for this edition's interface.
+
+## Build from source
+
+Rust and Cargo are required **only if you want to compile the project yourself**. Windows builds also need the MSVC C++ build tools and a Windows SDK.
 
 ```sh
 cargo build --locked --release
 ```
 
-The output is `target/release/ag_unlocker.exe` on Windows or `target/release/ag_unlocker` on Linux.
+Output: `target/release/ag_unlocker.exe` on Windows, or `target/release/ag_unlocker` on Linux. For the terminal interface, add `--tui` when launching it.
 
-An alternate Windows executable already built in this working copy is `target/release/ag_unlocker_ide_fix.exe`. It includes the IDE CLI-discovery fix described below. The normal build command above also includes this fix, but outputs the standard `ag_unlocker.exe` filename.
+Linux source is included; this release provides a Windows x64 binary only. See the [Linux notes](linux/readme.md) for the existing Linux packaging workflow.
 
-The release downloads and one-command launchers below fetch upstream binaries; those binaries do not include this checkout's translations or local fixes until built and published from it.
+### Cargo is not recognized
 
-## Installation
-
-1. Install Antigravity from the [official website](https://antigravity.google/download). For this English edition, use the executable built above. The original unlocker's binaries are available in upstream [Releases](https://github.com/confeden/Antigravity/releases).
-2. Run the unlocker **as administrator** (right-click the file). Without administrator rights, only the client patch is installed; the service that bypasses error 400, "User location is not supported", is not installed.
-3. Enter the free key from the pinned messages in the [t.me/nova_txt](https://t.me/nova_txt/69864) group. Each version has its own key: after updating the unlocker, you need a new one.
-4. Click **«Enable all»** (Antigravity will close for a few seconds).
-5. Launch Antigravity, sign in, and send a chat message. The card at the top of the window will turn green: **«Working. The model responded …»**.
-
-You can turn off any switch to undo that part of the setup.
-
-Custom DNS: enter your own DNS server (IPv4) under "Advanced settings". It joins the same pool as the other servers, and every answer is checked against a reference resolver, so a server that does not substitute addresses does not disrupt the setup.
-
-## Antigravity IDE and the shared CLI
-
-CLI means the command-line version of Antigravity, whose executable is `agy.exe`. An IDE extension can also run this executable in the background with `--hub` to provide a local service. In the inspected Windows installation, the IDE extension launches:
-
-```text
-%USERPROFILE%\.gemini\bin\agy.exe --hub
-```
-
-Patching the IDE's bundled Language Server does not patch this separate executable. Earlier builds of this checkout missed its folder during automatic discovery. Windows discovery now also checks `%USERPROFILE%\.gemini\bin`; if `agy.exe` is present there, it is included as an **Antigravity CLI** installation in patching and inspection.
-
-To apply the updated build:
-
-1. Close Antigravity IDE and any older unlocker window.
-2. Run the updated English executable as administrator. In this working copy, the separately built executable is `target/release/ag_unlocker_ide_fix.exe`.
-3. Check that the **Antigravity CLI** installation is detected. If necessary, use its pencil button to add the full path to your user profile's `.gemini\bin` folder manually.
-4. Click **Enable all** if offered, then reopen the IDE and retry sign-in.
-
-Verification status for this fix (2026-10-29): the discovery regression test and install-root tests pass, read-only inspection detects the shared CLI, and the updated executable builds and runs with `--version`. Successful account sign-in and a model response after applying this fix have **not yet been verified**. Finding an unpatched CLI does not by itself prove that it caused a particular sign-in error.
-
-## With or without a VPN
-
-No configuration is needed, with a VPN or a third-party DNS server. Antigravity's connections to the two Google servers go through a service on your computer, outside the VPN. Routes are chosen based on **actual model responses**, rather than speed; a route that returns an error is temporarily set aside.
-
-## Terminal version (TUI)
-
-For servers over SSH or when the window does not open. To use your local English build, pass `--tui` to its executable. The following download commands fetch the latest upstream release, which may still have the original interface language.
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/confeden/Antigravity/main/tui.sh | sh
-```
-
-In PowerShell, run as administrator:
+After installing Rust, reopen PowerShell and restart the editor if using its integrated terminal. To refresh the default Cargo path for the current session:
 
 ```powershell
-irm https://raw.githubusercontent.com/confeden/Antigravity/main/tui.ps1 | iex
-```
-
-Paste the key and press Enter. Arrow keys: select; Space: turn on or off; `q`: quit.
-
-## Linux
-
-Extract the archive and run `launch.sh` (double-click it or run `bash launch.sh`). You do not need `sudo`: if Antigravity is in a root-owned folder (`/opt`), the unlocker requests a password through pkexec only to write the patch.
-
-## Troubleshooting
-
-Check the card at the top of the window: it explains what is blocking the setup (antivirus, firewall, or another program) and what to do. If that does not help, click "Save report" and send the report to the group.
-
-### Cargo is not recognized in PowerShell
-
-If Rust is installed but `cargo` is not recognized, close and reopen the terminal. For an integrated terminal, restart its editor or host application too. To make the default installation available immediately in the current PowerShell session:
-
-```powershell
-$env:Path = "$env:USERPROFILE\.cargo\bin;$env:Path"
+$env:Path = "$env:USERPROFILE/.cargo/bin;$env:Path"
 cargo --version
 ```
 
-If that still fails, check that Rust installation completed and that `%USERPROFILE%\.cargo\bin\cargo.exe` exists.
+### Build warnings and public-source limitations
 
-### Build warnings
+- `release canary` is a build/provenance identifier.
+- `private routes: relay=false exits=false group=false` means the corresponding upstream private route assets/configuration are absent. They are not included in this release.
+- `unused import` and `function ... is never used` warnings did not prevent the Windows executable from building.
 
-- `release canary`: an informational build/provenance identifier printed by the build script.
-- `private routes: relay=false exits=false group=false`: the build does not include the corresponding private route assets/configuration. It can still build, but does not include all of the maintainer's preconfigured connection routes.
-- `unused import` and `function ... is never used`: code is unused in the current build. These warnings did not prevent the verified Windows executable from building; a successful build alone does not confirm working sign-in or chat.
+A successful build does not verify sign-in, route availability, or chat. The public source does not include the maintainer's private exit list or Group proxy server configuration; available alternatives depend on the local setup.
 
-## System changes
+## What changes on your system?
 
-All changes are targeted and can be undone using the switches in the window.
+| Component | Change |
+| --- | --- |
+| Installed Language Server / CLI | Equal-length replacements of `ineligible` → `inexigible` and `https_proxy` → `AG_LS_PROXY`; file size stays the same. Includes the discovered shared Antigravity CLI. |
+| Windows local proxy/service | Uses `%ProgramData%/AGUnlocker` and `127.0.0.1:53129`. The custom `AG_LS_PROXY` variable points to it. |
+| DNS rules (NRPT) | Target `cloudcode-pa.googleapis.com` and `daily-cloudcode-pa.googleapis.com`. Other domains retain their usual DNS path. |
+| IPv4 priority | Applied when there is no global IPv6 connectivity; removed when the corresponding setup is undone. |
 
-1. **Language Server / CLI** (`language_server.exe`, `agy.exe`): two equal-length string replacements: `ineligible` → `inexigible` (removes the regional restriction) and `https_proxy` → `AG_LS_PROXY`. The file size stays the same.
-   On Windows, this also includes the shared CLI at `%USERPROFILE%\.gemini\bin\agy.exe` launched by the IDE extension; patching only the IDE's bundled Language Server leaves that CLI unchanged.
-2. **Local proxy and service** (`%ProgramData%\AGUnlocker`, address `127.0.0.1:53129`): only `AG_LS_PROXY` points to it. The system-wide `HTTPS_PROXY` stays unchanged; `git` and browsers continue to work as before. TLS is not decrypted, and no certificates are installed.
-3. **DNS rules (NRPT)** apply only to `cloudcode-pa.googleapis.com` and `daily-cloudcode-pa.googleapis.com`. Other DNS queries, including account sign-in, follow their usual path.
-4. **IPv4 priority** over IPv6, only when you have no global IPv6 connectivity; removed when you undo the changes.
+The implementation does not set the system-wide `HTTPS_PROXY`, decrypt TLS, or install certificates. Use the application's switches to undo its setup.
 
-**Gemini CLI:** this unlocker does not provide patches for Gemini CLI. This support limitation does not mean that Gemini CLI is disabled or unavailable. The `agy.exe` executable mentioned above is Antigravity CLI, even when it is located under `.gemini\bin`.
+## Need help?
 
-The public source does not include the built-in exit list or the server side of the "Group proxy" route (to avoid overloading third-party servers). Without these, the program still builds and works using the other routes.
+[Open an issue](https://github.com/navid1256/Antigravity-English/issues) with your Windows and Antigravity versions, the unlocker version, the exact error, and steps to reproduce it. **Save report** provides diagnostics; review the contents before sharing them publicly.
 
-## VirusTotal
+Verification for this preview (2026-10-29): the discovery regression and install-root tests pass, read-only inspection finds the shared CLI, and the executable starts with `--version`. Full IDE sign-in and chat verification is still pending. Reports of successful or failed setups are welcome.
 
-Antivirus software may flag unsigned programs with complex contents. The source code is public; if you do not trust it, run it in a virtual machine.
+If this English edition helped you, **[give the repository a star](https://github.com/navid1256/Antigravity-English)** so you can find it again and help others discover it.
 
----
+## Credits and license
 
-# Made with ❤️
+Based on [confeden/Antigravity](https://github.com/confeden/Antigravity). Original package author: Brent, [@nova_txt](https://t.me/nova_txt). English edition maintained at [navid1256/Antigravity-English](https://github.com/navid1256/Antigravity-English).
 
-🙋 **Telegram group:** [@nova_txt](https://t.me/nova_txt) — questions, news, and
-support.
+[Upstream video guide](https://youtu.be/aybWT_7wtqA) · [Upstream community](https://t.me/nova_txt) · [Donate to the upstream project](https://nova-app.eu/donate)
 
-☕ **[Donate](https://nova-app.eu/donate)** — if Antigravity Unlocker has been useful to you.
-An optional way to say "thank you".
+The original **Antigravity Non-Commercial & Restricted Use License** is retained. See [LICENSE](LICENSE) for its terms.
