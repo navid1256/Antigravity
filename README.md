@@ -119,4 +119,4 @@ Based on [confeden/Antigravity](https://github.com/confeden/Antigravity). Origin
 
 [Upstream video guide](https://youtu.be/aybWT_7wtqA) · [Upstream community](https://t.me/nova_txt) · [Donate to the upstream project](https://nova-app.eu/donate)
 
-The original **Antigravity Non-Commercial & Restricted Use License** is retained. See [LICENSE](LICENSE) for its terms.
+English translation and edition-specific contributions: © 2026 Navid ([navid1256](https://github.com/navid1256)). The original **Antigravity Non-Commercial & Restricted Use License** and upstream copyright notice are retained. See [LICENSE](LICENSE) for the attribution and terms.
